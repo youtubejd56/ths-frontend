@@ -81,9 +81,7 @@ const Short = () => {
 
     try {
       setLoading(true);
-      await axios.post(API_URL, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      await axios.post(API_URL, formData);
       alert("✅ Video uploaded successfully!");
       handleRemoveVideo();
       setTitle("");

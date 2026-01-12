@@ -57,9 +57,7 @@ const Event = () => {
     formData.append('description', description);
 
     try {
-      const response = await axios.post(`${API_BASE}/api/posts/`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const response = await axios.post(`${API_BASE}/api/posts/`, formData);
 
       const newPost = {
         ...response.data,
