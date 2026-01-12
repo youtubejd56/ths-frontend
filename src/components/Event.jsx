@@ -26,7 +26,13 @@ const Event = () => {
   }, []);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
+      alert("❌ File size must be less than 10MB!");
+      e.target.value = null; // Clear input
+      return;
+    }
+    setFile(selectedFile);
   };
 
   const removeFile = () => {
