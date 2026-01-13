@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import api from "../api/axiosInstance";
 import Images10 from "../assets/admin1.png";
 import { Lock, User, ArrowRight, AlertCircle, Shield, Sparkles } from 'lucide-react';
 
@@ -17,8 +17,8 @@ const AdminLogin = () => {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.post(
-        "/api/admin-login/",
+      const response = await api.post(
+        "/admin-login/",
         { username: u, password: p },
         { withCredentials: true }
       );
