@@ -108,7 +108,7 @@ const Event = () => {
   };
 
   return (
-    <div className="px-8 py-6 h-screen">
+    <div className="px-8 py-6 min-h-screen pb-32">
       <h2 className="text-3xl font-bold mb-6">Event Posts</h2>
 
       <button
@@ -211,7 +211,7 @@ const Event = () => {
             <div className="border-2 border-dashed border-gray-300 p-4 text-center rounded-lg mb-4">
               <input
                 type="file"
-                accept="image/*,video/*,application/pdf"
+                accept="image/*"
                 onChange={handleFileChange}
                 id="fileInput"
                 className="hidden"
