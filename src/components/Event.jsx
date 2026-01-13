@@ -27,13 +27,25 @@ const Event = () => {
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile && selectedFile.size > 10 * 1024 * 1024) {
-      alert("❌ File size must be less than 10MB!");
-      e.target.value = null; // Clear input
+    if (!selectedFile) return;
+
+    // Only allow images
+    if (!selectedFile.type.startsWith("image/")) {
+      alert("❌ Only image files are allowed!");
+      e.target.value = null;
       return;
     }
+
+    // Image max size: 500KB
+    if (selectedFile.size > 500 * 1024) {
+      alert("❌ Image must be less than 500KB!");
+      e.target.value = null;
+      return;
+    }
+
     setFile(selectedFile);
   };
+
 
   const removeFile = () => {
     setFile(null);
