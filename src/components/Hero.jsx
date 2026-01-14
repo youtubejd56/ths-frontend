@@ -100,7 +100,7 @@ const Hero = () => {
           <div className="absolute inset-0 bg-black/20"></div>
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
             <div className="text-center mb-8">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+              <h1 className="text-xl md:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
                 Government Technical High School
               </h1>
               <p className="text-xl md:text-2xl text-indigo-200 font-semibold">Pala, Kottayam</p>
@@ -111,7 +111,14 @@ const Hero = () => {
             </div>
 
             <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 shadow-2xl border border-white/20">
-              <p className="text-lg leading-relaxed text-white/90 text-justify font-noto">
+              <p
+                className="text-sm md:text-lg text-white/90 text-justify font-noto"
+                style={{
+                  lineHeight: "2.0",
+                  letterSpacing: "0.2px",
+                  wordSpacing: "2px"
+                }}
+              >
                 കോട്ടയം ജില്ലയ്ക്കാകെ അഭിമാനം പകരുന്ന സാങ്കേതിക വിദ്യാഭ്യാസ സ്ഥാപനമായ ഗവൺമെൻറ് ടെക്നിക്കൽ ഹൈസ്കൂൾ പാലാ 1961-ലാണ് സ്ഥാപിതമായത്. മീനച്ചിലാറിന്റെ തീരത്ത് മുത്തോലി ഗ്രാമപഞ്ചായത്ത് അഞ്ചാം വാർഡിൽ ആരെയും ആകർഷിക്കുന്ന രീതിയിൽ പൂഞ്ഞാർ ഏറ്റുമാനൂർ സ്റ്റേറ്റ് ഹൈവേയ്ക്ക് സമീപം തലയുയർത്തി നിൽക്കുന്ന വിദ്യാലയമാണ് Govt. THS, Pala. പ്രകൃതിരമണീയത തുളുമ്പി നിൽക്കുന്ന വിശാലമായ ക്യാമ്പസ് ആണ് ഈ സ്കൂളിൽ ഉള്ളത്.
               </p>
             </div>
@@ -173,7 +180,7 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               <Cpu className="w-10 h-10 text-white" />
-              <h2 className="text-3xl md:text-4xl font-bold text-white">Extracurricular Activities</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-white">Extracurricular Activities</h2>
             </div>
 
             <div className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 md:p-12 border border-white/20">
@@ -188,7 +195,7 @@ const Hero = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="flex items-center gap-4 mb-8">
             <BookOpen className="w-10 h-10 text-indigo-600" />
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Physical Facilities</h2>
+            <h2 className="text-2xl md:text-4xl font-bold text-gray-800">Physical Facilities</h2>
           </div>
 
           <div className="bg-white rounded-3xl shadow-xl p-8 md:p-12 border border-gray-100">
@@ -218,7 +225,7 @@ const Hero = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4 mb-8">
               <MapPin className="w-10 h-10 text-indigo-600" />
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-800">Visit Us</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-800">Visit Us</h2>
             </div>
 
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100">
