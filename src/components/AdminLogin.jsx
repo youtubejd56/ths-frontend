@@ -70,7 +70,7 @@ const AdminLogin = () => {
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
       </div>
 
-      {/* Left Welcome Section (Desktop Only) */}
+      {/* Left Welcome Section */}
       <div className="hidden md:flex w-1/2 items-center justify-center relative z-10 p-8">
         <div className="relative group">
           <div className={`absolute -inset-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl blur-2xl ${isDark ? 'opacity-30' : 'opacity-20'} group-hover:opacity-50 transition-opacity duration-700 animate-pulse`}></div>
@@ -91,7 +91,7 @@ const AdminLogin = () => {
         </div>
       </div>
 
-      {/* Login Section (Mobile + Desktop) */}
+      {/* Login Section */}
       <div className="w-full md:w-1/2 flex items-center justify-center relative z-10 p-6">
         <div className="w-full max-w-md">
 
@@ -100,7 +100,6 @@ const AdminLogin = () => {
 
             <div className={`relative ${isDark ? 'bg-slate-900/90' : 'bg-white'} backdrop-blur-xl rounded-3xl shadow-2xl border ${isDark ? 'border-white/10' : 'border-gray-200'} p-10`}>
 
-              {/* Header */}
               <div className="text-center mb-8 relative">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 rounded-2xl mb-4 shadow-lg">
                   <Lock className="w-10 h-10 text-white animate-pulse" />
@@ -112,7 +111,6 @@ const AdminLogin = () => {
                 </h2>
               </div>
 
-              {/* Form */}
               <div className="space-y-6">
                 <div>
                   <label className={`block text-sm font-bold ${isDark ? 'text-gray-300' : 'text-gray-700'} mb-2 flex items-center gap-2`}>
@@ -138,6 +136,13 @@ const AdminLogin = () => {
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                   />
+
+                  {/* Added Forgot Password */}
+                  <div className="flex justify-end -mt-1">
+                    <Link to="/forgot-password" className="text-sm font-semibold text-cyan-600 hover:underline">
+                      Forgot Password?
+                    </Link>
+                  </div>
                 </div>
 
                 <button
