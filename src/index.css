@@ -10,6 +10,7 @@
 #app {
   height: 100%;
 }
+
 html,
 body {
   position: relative;
@@ -18,8 +19,7 @@ body {
 
 body {
   font-family:
-    Helvetica Neue,z
-    Helvetica,
+    Helvetica Neue, z Helvetica,
     Arial,
     sans-serif;
   font-size: 14px;
@@ -82,28 +82,59 @@ body {
 
 
 
- .animate-pulse-rgb {
-          background: conic-gradient(
-            from 0deg,
-            #ff0000,
-            #ff7300,
-            #fffb00,
-            #48ff00,
-            #00ffd5,
-            #002bff,
-            #7a00ff,
-            #ff00ab,
-            #ff0000
-          );
-          animation: rotate 4s linear infinite;
-          filter: blur(6px);
-          opacity: 0.8;
-        }
-        @keyframes rotate {
-          0% {
-            transform: rotate(0deg);
-          }
-          100% {
-            transform: rotate(360deg);
-          }
-        }
+.animate-pulse-rgb {
+  background: conic-gradient(from 0deg,
+      #ff0000,
+      #ff7300,
+      #fffb00,
+      #48ff00,
+      #00ffd5,
+      #002bff,
+      #7a00ff,
+      #ff00ab,
+      #ff0000);
+  animation: rotate 4s linear infinite;
+  filter: blur(6px);
+  opacity: 0.8;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glass-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: scale(1.25);
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes glass-float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-18px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
