@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../api/axiosInstance";
 import { Lock, User, ArrowRight, AlertCircle, Shield, Sparkles } from 'lucide-react';
@@ -10,6 +10,12 @@ const AdminLogin = () => {
   const [loading, setLoading] = useState(false);
   const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
+
+  // --- IMPORTANT FIX: Clear state on load & block browser autofill ---
+  useEffect(() => {
+    setUsername("");
+    setPassword("");
+  }, []);
 
   const doLogin = async (u, p) => {
     setError("");
@@ -70,7 +76,7 @@ const AdminLogin = () => {
         <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
       </div>
 
-      {/* Left Welcome Section */}
+      {/* Left Section */}
       <div className="hidden md:flex w-1/2 items-center justify-center relative z-10 p-8">
         <div className="relative group">
           <div className={`absolute -inset-4 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl blur-2xl ${isDark ? 'opacity-30' : 'opacity-20'} group-hover:opacity-50 transition-opacity duration-700 animate-pulse`}></div>
@@ -91,23 +97,19 @@ const AdminLogin = () => {
         </div>
       </div>
 
-      {/* Login Section */}
+      {/* Form Section */}
       <div className="w-full md:w-1/2 flex items-center justify-center relative z-10 p-6">
         <div className="w-full max-w-md">
-
           <div className="relative group">
             <div className={`absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-3xl blur ${isDark ? 'opacity-25' : 'opacity-15'} group-hover:opacity-40 transition duration-500`}></div>
-
             <div className={`relative ${isDark ? 'bg-slate-900/90' : 'bg-white'} backdrop-blur-xl rounded-3xl shadow-2xl border ${isDark ? 'border-white/10' : 'border-gray-200'} p-10`}>
 
-              <div className="text-center mb-8 relative">
+              <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 rounded-2xl mb-4 shadow-lg">
                   <Lock className="w-10 h-10 text-white animate-pulse" />
                 </div>
-                <h2 className="text-4xl font-black">
-                  <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                    Admin Portal
-                  </span>
+                <h2 className="text-4xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Admin Portal
                 </h2>
               </div>
 
@@ -118,6 +120,7 @@ const AdminLogin = () => {
                     Username
                   </label>
                   <input
+                    autoComplete="off"
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
@@ -131,13 +134,13 @@ const AdminLogin = () => {
                     Password
                   </label>
                   <input
+                    autoComplete="new-password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20"
                   />
 
-                  {/* Added Forgot Password */}
                   <div className="flex justify-end py-2 -mt-1">
                     <Link to="/forgot-password" className="text-sm font-semibold text-cyan-600 hover:underline">
                       Forgot Password?
@@ -167,6 +170,7 @@ const AdminLogin = () => {
           </div>
         </div>
       </div>
+
     </div>
   );
 };
