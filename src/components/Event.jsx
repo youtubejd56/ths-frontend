@@ -10,26 +10,32 @@ const Event = () => {
   const [posts, setPosts] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [wordCount, setWordCount] = useState(0);
-  const [isAdmin, setIsAdmin] = useState(false); // 🔥 ADDED
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     axios.get(`${API_BASE}/api/posts/`)
       .then((res) => {
+        // 🔥 FIX: Ensure we always get an array
+        const postsArray = Array.isArray(res.data) ? res.data : (res.data.posts || []);
 
-        // 🔥 EXPECT BACKEND RESPONSE LIKE:
-        // { posts: [...], isAdmin: true/false }
-
-        const formattedPosts = res.data.posts.map(post => ({
+        const formatted = postsArray.map((post) => ({
           ...post,
           file: post.file
-            ? (post.file.startsWith('http') ? post.file : `${API_BASE}${post.file.startsWith('/') ? '' : '/'}${post.file}`)
+            ? (post.file.startsWith('http')
+              ? post.file
+              : `${API_BASE}${post.file.startsWith('/') ? '' : '/'}${post.file}`)
             : null,
         }));
 
-        setPosts(formattedPosts);
-        setIsAdmin(res.data.isAdmin || false); // 🔥 SET ADMIN
+        setPosts(formatted);
+
+        // Basic admin detect (token = logged in admin dashboard)
+        const token = localStorage.getItem("token");
+        setIsAdmin(!!token);
       })
-      .catch((err) => console.error('Failed to load posts:', err));
+      .catch((err) => {
+        console.error('Failed to load posts:', err);
+      });
   }, []);
 
   const handleFileChange = (e) => {
@@ -49,15 +55,6 @@ const Event = () => {
     }
 
     setFile(selectedFile);
-  };
-
-  const removeFile = () => setFile(null);
-
-  const handleDescriptionChange = (e) => {
-    const text = e.target.value;
-    const words = text.trim() ? text.trim().split(/\s+/) : [];
-    setDescription(text);
-    setWordCount(words.length);
   };
 
   const handlePost = async () => {
@@ -90,6 +87,7 @@ const Event = () => {
             : `${API_BASE}${response.data.file.startsWith('/') ? '' : '/'}${response.data.file}`)
           : null,
       };
+
       setPosts([newPost, ...posts]);
       setFile(null);
       setDescription('');
@@ -102,7 +100,7 @@ const Event = () => {
   };
 
   const handleRemovePost = async (id) => {
-    if (!isAdmin) return; // 🔥 BLOCK NON-ADMIN DELETE
+    if (!isAdmin) return;
 
     try {
       await axios.delete(`${API_BASE}/api/posts/${id}/`);
@@ -133,7 +131,8 @@ const Event = () => {
             <div key={post.id} className="bg-white rounded-lg shadow p-4 flex flex-col h-full">
               {post.file && (
                 <div className="w-full max-h-60 flex items-center justify-center overflow-hidden rounded-lg mb-3 bg-gray-100">
-                  {post.file.endsWith('.mp4') || post.file.endsWith('.webm') ? (
+                  {post.file.endsWith('.mp4') ||
+                    post.file.endsWith('.webm') ? (
                     <video controls className="max-h-60 w-auto object-contain rounded">
                       <source src={post.file} type="video/mp4" />
                     </video>
@@ -142,12 +141,10 @@ const Event = () => {
                   )}
                 </div>
               )}
-
               {post.description && (
                 <p className="text-gray-800 text-sm mt-2 break-words line-clamp-4">{post.description}</p>
               )}
 
-              {/* 🔥 DELETE BUTTON ONLY FOR ADMIN */}
               {isAdmin && (
                 <button
                   onClick={() => handleRemovePost(post.id)}
