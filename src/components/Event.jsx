@@ -120,7 +120,45 @@ const Event = () => {
           + Create Post
         </button>
       ) : (
-        <p className="text-red-600 mb-4 text-sm">Max 4 posts allowed!</p>
+        <p className="text-red-600 mb-4 text-sm">Maximum 4 posts allowed! You can upload again next week.</p>
+      )}
+
+      {/* Modal for creating post */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded shadow w-full max-w-md">
+            <h3 className="text-xl font-bold mb-4">Create Post</h3>
+            <input
+              type="file"
+              onChange={handleFileChange}
+              className="mb-3"
+            />
+            <textarea
+              value={description}
+              onChange={(e) => {
+                setDescription(e.target.value);
+                setWordCount(e.target.value.trim().split(/\s+/).filter(Boolean).length);
+              }}
+              placeholder="Write description..."
+              className="w-full border p-2 mb-3 rounded"
+            />
+            <p className="text-gray-500 text-sm mb-3">{wordCount}/20 words</p>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlePost}
+                className="px-4 py-2 rounded bg-green-600 hover:bg-green-500 text-white"
+              >
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {posts.length > 0 ? (
