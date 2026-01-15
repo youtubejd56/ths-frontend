@@ -149,14 +149,14 @@ const Event = () => {
                 )
               ) : (
                 <>
-                  <span className="text-gray-900 text-sm sm:text-base">Click to upload</span>
-                  <span className="text-black text-xs sm:text-sm">Image (&lt;500KB) Jpg or Png</span>
+                  <span className="text-gray-700 text-sm sm:text-base">Click to upload</span>
+                  <span className="text-gray-800 text-xs sm:text-sm">Image (&lt;500KB) Jpg or Png</span>
                 </>
               )}
               <input type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
             </label>
 
-            <p className="text-sm sm:text-base font-medium text-gray-900 mb-1">Description</p>
+            <p className="text-sm sm:text-base font-medium text-black mb-1">Description</p>
             <textarea
               value={description}
               onChange={(e) => {
