@@ -123,19 +123,26 @@ const Event = () => {
         <p className="text-red-600 mb-4 text-sm">Maximum 4 posts allowed! You can upload again next week.</p>
       )}
 
-      {/* Modal for creating post */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-6">
+        <div className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white/90 backdrop-blur-md rounded-lg shadow-xl w-full max-w-md p-6">
+            <h3 className="text-xl font-bold mb-4">Create Post</h3>
 
-            <h2 className="text-2xl font-semibold mb-5">Create New Post</h2>
-
-            {/* Upload Box */}
             <label
-              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 h-44 mb-4"
+              className="flex flex-col items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 h-44 mb-4 overflow-hidden"
             >
-              <span className="text-gray-500 text-sm mb-1">Click to upload</span>
-              <span className="text-gray-400 text-xs">Image (max 500KB)</span>
+              {file ? (
+                <img
+                  src={URL.createObjectURL(file)}
+                  alt="preview"
+                  className="h-full object-contain"
+                />
+              ) : (
+                <>
+                  <span className="text-gray-500 text-sm mb-1">Click to upload</span>
+                  <span className="text-gray-400 text-xs">Image (max 500KB)</span>
+                </>
+              )}
               <input
                 type="file"
                 accept="image/*"
@@ -144,39 +151,35 @@ const Event = () => {
               />
             </label>
 
-            {/* Description */}
-            <p className="text-sm text-gray-700 mb-1">Description</p>
             <textarea
               value={description}
               onChange={(e) => {
                 setDescription(e.target.value);
                 setWordCount(e.target.value.trim().split(/\s+/).filter(Boolean).length);
               }}
-              placeholder="Share what makes this moment special..."
-              className="w-full border border-gray-300 rounded p-2 text-sm h-24"
+              placeholder="Write description..."
+              className="w-full border p-2 mb-3 rounded"
             />
 
-            <p className="text-gray-500 text-xs mt-1">{wordCount}/20 words</p>
+            <p className="text-gray-500 text-sm mb-3">{wordCount}/20 words</p>
 
-            {/* Actions */}
-            <div className="flex justify-end gap-3 mt-6">
+            <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 rounded bg-gray-200 hover:bg-gray-300 text-sm"
+                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
               >
                 Cancel
               </button>
               <button
                 onClick={handlePost}
-                className="px-5 py-2 rounded bg-blue-600 hover:bg-blue-500 text-white text-sm"
+                className="px-4 py-2 rounded bg-green-600 hover:bg-green-500 text-white"
               >
-                Publish Post
+                Post
               </button>
             </div>
           </div>
         </div>
       )}
-
 
       {posts.length > 0 ? (
         <div className="grid md:grid-cols-3 gap-6">
