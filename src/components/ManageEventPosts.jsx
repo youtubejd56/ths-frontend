@@ -7,16 +7,29 @@ const API_BASE = API_BASE_URL.replace(/\/$/, "");
 const ManageEventPosts = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [editPost, setEditPost] = useState(null);
+    const [editText, setEditText] = useState("");
 
-    // Fetch posts
     const fetchPosts = async () => {
         try {
             const res = await axios.get(`${API_BASE}/api/posts/`);
-            setPosts(Array.isArray(res.data) ? res.data : []);
-            setLoading(false);
+
+            const data = Array.isArray(res.data.posts) ? res.data.posts : [];
+
+            const formatted = data.map((post) => ({
+                ...post,
+                file: post.file
+                    ? post.file.startsWith("http")
+                        ? post.file
+                        : `${API_BASE}${post.file.startsWith("/") ? "" : "/"}${post.file}`
+                    : null,
+            }));
+
+            setPosts(formatted);
         } catch (error) {
             console.error("Failed to load posts:", error);
             setPosts([]);
+        } finally {
             setLoading(false);
         }
     };
@@ -25,16 +38,45 @@ const ManageEventPosts = () => {
         fetchPosts();
     }, []);
 
-    // Delete post (admin only)
     const handleDelete = async (id) => {
         if (!window.confirm("Are you sure you want to delete this post?")) return;
 
+        const token = localStorage.getItem("token");
+
         try {
-            await axios.delete(`${API_BASE}/api/posts/${id}/`);
-            setPosts(posts.filter((post) => post.id !== id));
+            await axios.delete(`${API_BASE}/api/posts/${id}/`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            setPosts((prev) => prev.filter((p) => p.id !== id));
         } catch (error) {
             console.error("Delete failed:", error);
-            alert("Failed to delete post. Only admin can delete.");
+            alert("Delete failed — only Admin can delete");
+        }
+    };
+
+    const handleEditSave = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            await axios.patch(
+                `${API_BASE}/api/posts/${editPost.id}/`,
+                { description: editText },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
+
+            setPosts((prev) =>
+                prev.map((p) =>
+                    p.id === editPost.id ? { ...p, description: editText } : p
+                )
+            );
+
+            // sync Event page
+            window.dispatchEvent(new Event("posts-updated"));
+
+            setEditPost(null);
+            setEditText("");
+        } catch (error) {
+            console.error("Edit failed:", error);
+            alert("Failed to update description");
         }
     };
 
@@ -43,6 +85,7 @@ const ManageEventPosts = () => {
     return (
         <div className="p-8">
             <h2 className="text-2xl font-bold mb-6">Manage Event Posts</h2>
+
             {posts.length === 0 ? (
                 <p>No posts available.</p>
             ) : (
@@ -56,22 +99,47 @@ const ManageEventPosts = () => {
                                             <source src={post.file} type="video/mp4" />
                                         </video>
                                     ) : (
-                                        <img
-                                            src={post.file}
-                                            alt="Uploaded"
-                                            className="max-h-60 w-auto object-contain rounded"
-                                        />
+                                        <img src={post.file} alt="" className="max-h-60 w-auto object-contain rounded" />
                                     )}
                                 </div>
                             )}
-                            {post.description && (
-                                <p className="text-gray-800 text-sm mt-2 break-words line-clamp-4">
-                                    {post.description}
-                                </p>
+
+                            {editPost?.id === post.id ? (
+                                <>
+                                    <textarea
+                                        className="border p-2 text-sm w-full"
+                                        value={editText}
+                                        onChange={(e) => setEditText(e.target.value)}
+                                    />
+                                    <button
+                                        onClick={handleEditSave}
+                                        className="mt-2 bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded text-sm w-fit"
+                                    >
+                                        Save
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    {post.description && (
+                                        <p className="text-gray-800 text-sm mt-2 break-words line-clamp-4">
+                                            {post.description}
+                                        </p>
+                                    )}
+                                    <button
+                                        onClick={() => {
+                                            setEditPost(post);
+                                            setEditText(post.description || "");
+                                        }}
+                                        className="mt-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-1 rounded text-sm w-fit"
+                                    >
+                                        Edit
+                                    </button>
+                                </>
                             )}
+
                             <button
                                 onClick={() => handleDelete(post.id)}
-                                className="mt-4 bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded text-sm w-fit"
+                                className="mt-2 bg-red-600 hover:bg-red-500 text-white px-4 py-1 rounded text-sm w-fit"
                             >
                                 Delete
                             </button>

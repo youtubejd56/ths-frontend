@@ -15,7 +15,6 @@ const Event = () => {
   useEffect(() => {
     axios.get(`${API_BASE}/api/posts/`)
       .then((res) => {
-        // 🔥 FIX: Ensure we always get an array
         const postsArray = Array.isArray(res.data) ? res.data : (res.data.posts || []);
 
         const formatted = postsArray.map((post) => ({
@@ -29,7 +28,6 @@ const Event = () => {
 
         setPosts(formatted);
 
-        // Basic admin detect (token = logged in admin dashboard)
         const token = localStorage.getItem("token");
         setIsAdmin(!!token);
       })
@@ -131,8 +129,7 @@ const Event = () => {
             <div key={post.id} className="bg-white rounded-lg shadow p-4 flex flex-col h-full">
               {post.file && (
                 <div className="w-full max-h-60 flex items-center justify-center overflow-hidden rounded-lg mb-3 bg-gray-100">
-                  {post.file.endsWith('.mp4') ||
-                    post.file.endsWith('.webm') ? (
+                  {post.file.endsWith('.mp4') || post.file.endsWith('.webm') ? (
                     <video controls className="max-h-60 w-auto object-contain rounded">
                       <source src={post.file} type="video/mp4" />
                     </video>
