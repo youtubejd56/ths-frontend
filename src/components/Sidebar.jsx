@@ -1,4 +1,4 @@
-import { FaTachometerAlt, FaClipboardList, FaUserGraduate, FaDivide, FaSignOutAlt, FaFileAlt } from "react-icons/fa";
+import { FaTachometerAlt, FaClipboardList, FaUserGraduate, FaDivide, FaSignOutAlt, FaFileAlt, FaVideo } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
@@ -31,6 +31,9 @@ const Sidebar = () => {
           </Link>
           <Link to="/admin-dashboard/manage-events" className="flex items-center gap-3 hover:text-yellow-400 transition">
             <FaFileAlt /> Manage Event Posts
+          </Link>
+          <Link to="/admin-dashboard/manage-shorts" className="flex items-center gap-3 hover:text-yellow-400 transition">
+            <FaVideo /> Manage Short Posts
           </Link>
 
         </nav>

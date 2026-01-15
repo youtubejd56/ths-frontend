@@ -121,6 +121,18 @@ function App() {
           </ProtectedRoute>
         } />
 
+        {/* ================= NEW: Manage Short Posts ================= */}
+        <Route path="/admin-dashboard/manage-shorts" element={
+          <ProtectedRoute>
+            <div className="flex">
+              <Sidebar />
+              <div className="ml-64 w-full bg-gray-100 min-h-screen p-6">
+                <ManageShortPosts />
+              </div>
+            </div>
+          </ProtectedRoute>
+        } />
+
         {/* ================= REDIRECTS ================= */}
         <Route path="/attendance" element={<Navigate to="/admin-dashboard/attendance" replace />} />
         <Route path="/attendance-view" element={<Navigate to="/admin-dashboard/attendance-view" replace />} />
