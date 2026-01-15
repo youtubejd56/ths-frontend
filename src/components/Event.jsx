@@ -149,14 +149,14 @@ const Event = () => {
                 )
               ) : (
                 <>
-                  <span className="text-gray-600 text-sm sm:text-base">Click to upload</span>
-                  <span className="text-gray-400 text-xs sm:text-sm">Image (&lt;500KB) or Video</span>
+                  <span className="text-gray-900 text-sm sm:text-base">Click to upload</span>
+                  <span className="text-black text-xs sm:text-sm">Image (&lt;500KB) Jpg or Png</span>
                 </>
               )}
               <input type="file" accept="image/*,video/*" className="hidden" onChange={handleFileChange} />
             </label>
 
-            <p className="text-sm sm:text-base font-medium text-gray-800 mb-1">Description</p>
+            <p className="text-sm sm:text-base font-medium text-gray-900 mb-1">Description</p>
             <textarea
               value={description}
               onChange={(e) => {
@@ -167,7 +167,7 @@ const Event = () => {
               className="w-full rounded-lg p-2 sm:p-3 md:p-4 border text-sm sm:text-base bg-white/40 backdrop-blur"
               rows={3}
             />
-            <p className="text-xs sm:text-sm text-gray-700 mt-1">{wordCount}/20 words</p>
+            <p className="text-xs sm:text-sm text-black mt-1">{wordCount}/20 words</p>
 
             <div className="flex justify-end gap-3 mt-5">
               <button onClick={() => setShowModal(false)} className="px-4 py-2 sm:px-5 sm:py-3 rounded bg-white/50 hover:bg-white/70 text-sm sm:text-base">

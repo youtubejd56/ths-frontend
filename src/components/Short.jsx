@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Upload, X, Video, FileText, Image } from "lucide-react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../api/config";
 
 const API_URL = `${API_BASE_URL}/api/shorts/`;
+const API_WEEKLY_URL = `${API_BASE_URL}/api/shorts/user-weekly/`; // backend endpoint to return weekly count
 
 const Short = () => {
   const [video, setVideo] = useState(null);
@@ -13,12 +14,36 @@ const Short = () => {
   const [caption, setCaption] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [weeklyCount, setWeeklyCount] = useState(0); // weekly video uploads
+  const [uploadDisabled, setUploadDisabled] = useState(false); // disable upload if limit reached
 
   const navigate = useNavigate();
   const wordCount = caption.trim() ? caption.trim().split(/\s+/).length : 0;
 
+  // Fetch weekly uploads on mount
+  useEffect(() => {
+    const fetchWeeklyUploads = async () => {
+      try {
+        const token = localStorage.getItem("token"); // if using JWT
+        const res = await axios.get(API_WEEKLY_URL, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const count = res.data.count || 0;
+        setWeeklyCount(count);
+        if (count >= 2) setUploadDisabled(true);
+      } catch (err) {
+        console.error("Failed to fetch weekly uploads:", err);
+      }
+    };
+    fetchWeeklyUploads();
+  }, []);
 
   const handleVideoUpload = (e) => {
+    if (uploadDisabled) {
+      alert("❌ You have reached the weekly limit of 2 videos!");
+      return;
+    }
+
     const selectedFile = e.target.files[0];
     if (!selectedFile) return;
 
@@ -57,6 +82,11 @@ const Short = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (uploadDisabled) {
+      alert("❌ You have reached the weekly limit of 2 videos!");
+      return;
+    }
+
     const wordCount = caption.trim().split(/\s+/).length;
 
     if (!file) {
@@ -86,6 +116,13 @@ const Short = () => {
       handleRemoveVideo();
       setTitle("");
       setCaption("");
+
+      // Increment weekly count and disable if limit reached
+      setWeeklyCount((prev) => {
+        const newCount = prev + 1;
+        if (newCount >= 2) setUploadDisabled(true);
+        return newCount;
+      });
     } catch (err) {
       console.error(err);
       alert("❌ Failed to upload video!");
@@ -97,9 +134,13 @@ const Short = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 p-6">
       <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl w-full max-w-3xl p-8 border border-white/20 relative overflow-hidden">
-        {/* Decorative background elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl -z-0"></div>
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-pink-400/20 to-purple-400/20 rounded-full blur-3xl -z-0"></div>
+
+        {/* Weekly limit message */}
+        {uploadDisabled && (
+          <div className="mb-4 p-4 bg-yellow-100 border-l-4 border-yellow-400 rounded text-yellow-700 font-semibold">
+            ❌ You have reached the weekly limit of 2 videos. Next week, you can upload again.
+          </div>
+        )}
 
         {/* Header */}
         <div className="relative z-10 mb-8">
@@ -118,14 +159,12 @@ const Short = () => {
         <div className="relative z-10">
           {!video ? (
             <label className="group relative flex flex-col items-center justify-center border-2 border-dashed border-indigo-300 rounded-2xl p-12 cursor-pointer hover:border-indigo-500 transition-all duration-300 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 hover:from-indigo-100/50 hover:to-purple-100/50">
-              {/* Animated upload icon */}
               <div className="relative mb-4">
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity animate-pulse"></div>
                 <div className="relative bg-gradient-to-br from-indigo-500 to-purple-600 p-4 rounded-2xl shadow-lg group-hover:scale-110 transition-transform duration-300">
                   <Upload className="text-white" size={40} />
                 </div>
               </div>
-
               <p className="text-gray-800 font-semibold text-lg mb-2">
                 Click or drag & drop to upload
               </p>
@@ -133,7 +172,6 @@ const Short = () => {
                 <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                 MP4, MOV • Max 10MB • Max 2 minutes
               </p>
-
               <input
                 type="file"
                 accept="video/*"
@@ -232,7 +270,7 @@ const Short = () => {
             <div className="flex flex-col sm:flex-row gap-3">
               <button
                 onClick={handleSubmit}
-                disabled={loading}
+                disabled={loading || uploadDisabled}
                 className="relative px-8 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl hover:from-indigo-700 hover:to-purple-700 font-semibold transition-all duration-300 hover:shadow-xl hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden group"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
