@@ -7,21 +7,25 @@ const API_BASE = API_BASE_URL.replace(/\/$/, "");
 const ManageEventPosts = () => {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [editPost, setEditPost] = useState(null);
-    const [editText, setEditText] = useState("");
+    const [editingId, setEditingId] = useState(null);
+    const [editDescription, setEditDescription] = useState("");
 
     const fetchPosts = async () => {
         try {
             const res = await axios.get(`${API_BASE}/api/posts/`);
 
-            const data = Array.isArray(res.data.posts) ? res.data.posts : [];
+            const raw = Array.isArray(res.data)
+                ? res.data
+                : Array.isArray(res.data.posts)
+                    ? res.data.posts
+                    : [];
 
-            const formatted = data.map((post) => ({
+            const formatted = raw.map((post) => ({
                 ...post,
                 file: post.file
-                    ? post.file.startsWith("http")
+                    ? (post.file.startsWith("http")
                         ? post.file
-                        : `${API_BASE}${post.file.startsWith("/") ? "" : "/"}${post.file}`
+                        : `${API_BASE}${post.file.startsWith("/") ? "" : "/"}${post.file}`)
                     : null,
             }));
 
@@ -39,18 +43,16 @@ const ManageEventPosts = () => {
     }, []);
 
     const handleDelete = async (id) => {
-        if (!window.confirm("Are you sure you want to delete this post?")) return;
+        if (!window.confirm("Delete this post?")) return;
 
         const token = localStorage.getItem("token");
-
         try {
             await axios.delete(`${API_BASE}/api/posts/${id}/`, {
                 headers: { Authorization: `Bearer ${token}` },
             });
             setPosts((prev) => prev.filter((p) => p.id !== id));
-        } catch (error) {
-            console.error("Delete failed:", error);
-            alert("Delete failed — only Admin can delete");
+        } catch {
+            alert("Delete failed");
         }
     };
 
@@ -58,25 +60,21 @@ const ManageEventPosts = () => {
         const token = localStorage.getItem("token");
         try {
             await axios.patch(
-                `${API_BASE}/api/posts/${editPost.id}/`,
-                { description: editText },
+                `${API_BASE}/api/posts/${editingId}/`,
+                { description: editDescription },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
 
             setPosts((prev) =>
                 prev.map((p) =>
-                    p.id === editPost.id ? { ...p, description: editText } : p
+                    p.id === editingId ? { ...p, description: editDescription } : p
                 )
             );
 
-            // sync Event page
-            window.dispatchEvent(new Event("posts-updated"));
-
-            setEditPost(null);
-            setEditText("");
-        } catch (error) {
-            console.error("Edit failed:", error);
-            alert("Failed to update description");
+            setEditingId(null);
+            setEditDescription("");
+        } catch {
+            alert("Edit failed");
         }
     };
 
@@ -104,37 +102,35 @@ const ManageEventPosts = () => {
                                 </div>
                             )}
 
-                            {editPost?.id === post.id ? (
-                                <>
-                                    <textarea
-                                        className="border p-2 text-sm w-full"
-                                        value={editText}
-                                        onChange={(e) => setEditText(e.target.value)}
-                                    />
-                                    <button
-                                        onClick={handleEditSave}
-                                        className="mt-2 bg-green-600 hover:bg-green-500 text-white px-4 py-1 rounded text-sm w-fit"
-                                    >
-                                        Save
-                                    </button>
-                                </>
+                            {editingId === post.id ? (
+                                <textarea
+                                    className="border p-2 text-sm rounded"
+                                    value={editDescription}
+                                    onChange={(e) => setEditDescription(e.target.value)}
+                                />
                             ) : (
-                                <>
-                                    {post.description && (
-                                        <p className="text-gray-800 text-sm mt-2 break-words line-clamp-4">
-                                            {post.description}
-                                        </p>
-                                    )}
-                                    <button
-                                        onClick={() => {
-                                            setEditPost(post);
-                                            setEditText(post.description || "");
-                                        }}
-                                        className="mt-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-1 rounded text-sm w-fit"
-                                    >
-                                        Edit
-                                    </button>
-                                </>
+                                <p className="text-gray-800 text-sm mt-2 break-words line-clamp-4">
+                                    {post.description}
+                                </p>
+                            )}
+
+                            {editingId === post.id ? (
+                                <button
+                                    onClick={handleEditSave}
+                                    className="mt-3 bg-blue-600 hover:bg-blue-500 text-white px-4 py-1 rounded text-sm w-fit"
+                                >
+                                    Save
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        setEditingId(post.id);
+                                        setEditDescription(post.description || "");
+                                    }}
+                                    className="mt-3 bg-yellow-500 hover:bg-yellow-400 text-white px-4 py-1 rounded text-sm w-fit"
+                                >
+                                    Edit
+                                </button>
                             )}
 
                             <button
