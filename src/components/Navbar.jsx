@@ -34,7 +34,7 @@ const Navbar = () => {
         }`}>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center h-16 w-full">
             {/* Logo + Title */}
             <div className="flex items-center justify-between gap-3 group cursor-pointer">
               <img
@@ -47,23 +47,30 @@ const Navbar = () => {
               </h1>
             </div>
 
-            {/* Desktop Menu - Simple Text Links */}
+            {/* Spacer ONLY for Desktop */}
+            <div className="hidden md:block flex-1"></div>
+
+            {/* Desktop Menu */}
             <nav className="hidden md:block">
-              <ul className="flex items-center  justify-between gap-6 lg:gap-8">
+              <ul className="flex items-center justify-between gap-6 lg:gap-8">
                 {navItems.map((item, idx) => (
                   <li key={idx}>
                     <NavLink
                       to={item.path}
-                      className={({ isActive }) => `relative font-semibold text-base transition-all duration-300 ${isActive
-                        ? 'text-white'
-                        : 'text-white/90 hover:text-white'
-                        }`}
+                      className={({ isActive }) =>
+                        `relative font-semibold text-base transition-all duration-300 ${isActive
+                          ? 'text-white'
+                          : 'text-white/90 hover:text-white'
+                        }`
+                      }
                     >
                       {({ isActive }) => (
                         <>
                           {item.label}
-                          <span className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0'
-                            }`}></span>
+                          <span
+                            className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0'
+                              }`}
+                          ></span>
                         </>
                       )}
                     </NavLink>
@@ -72,7 +79,7 @@ const Navbar = () => {
               </ul>
             </nav>
 
-            {/* Mobile Menu Toggle - Only on Mobile */}
+            {/* Mobile Toggle */}
             <button
               className="md:hidden z-50 relative group"
               onClick={() => setOpenMenu(!openMenu)}
@@ -87,6 +94,7 @@ const Navbar = () => {
               </div>
             </button>
           </div>
+
         </div>
       </div>
 
