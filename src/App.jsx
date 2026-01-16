@@ -21,8 +21,10 @@ import TermsOfService from "./components/TermsOfService";
 import ResetPassword from "./components/ResetPassword";
 import VerifyOtp from "./components/VerifyOtp";
 
+
 // NEW Manage Event Posts component
 import ManageEventPosts from "./components/ManageEventPosts";
+import ManageShortPosts from "./components/ManageShortPosts";
 
 function App() {
   return (
