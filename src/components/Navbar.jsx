@@ -34,9 +34,9 @@ const Navbar = () => {
         }`}>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex items-center h-16 w-full">
-            {/* Logo + Title */}
-            <div className="flex items-center justify-between gap-3 group cursor-pointer">
+          <div className="w-full flex items-center h-16 px-3 md:px-6">
+            {/* Left: Logo */}
+            <div className="flex items-center gap-3 cursor-pointer group">
               <img
                 className="w-12 h-12 rounded-md shadow-md group-hover:scale-105 transition-transform duration-300"
                 src={Logo}
@@ -47,20 +47,18 @@ const Navbar = () => {
               </h1>
             </div>
 
-            {/* Spacer ONLY for Desktop */}
-            <div className="hidden md:block flex-1"></div>
+            {/* Spacer grows on md+ so nav aligns right */}
+            <div className="flex-1 hidden md:block"></div>
 
-            {/* Desktop Menu */}
-            <nav className="hidden md:block">
-              <ul className="flex items-center justify-between gap-6 lg:gap-8">
+            {/* Desktop Navigation (md+) */}
+            <nav className="hidden md:flex">
+              <ul className="flex items-center gap-6 lg:gap-8">
                 {navItems.map((item, idx) => (
                   <li key={idx}>
                     <NavLink
                       to={item.path}
                       className={({ isActive }) =>
-                        `relative font-semibold text-base transition-all duration-300 ${isActive
-                          ? 'text-white'
-                          : 'text-white/90 hover:text-white'
+                        `relative font-semibold text-base transition duration-300 ${isActive ? 'text-white' : 'text-white/90 hover:text-white'
                         }`
                       }
                     >
@@ -68,7 +66,7 @@ const Navbar = () => {
                         <>
                           {item.label}
                           <span
-                            className={`absolute -bottom-1 left-0 h-0.5 bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0'
+                            className={`absolute left-0 -bottom-1 h-0.5 bg-white transition-all duration-300 ${isActive ? 'w-full' : 'w-0'
                               }`}
                           ></span>
                         </>
@@ -79,19 +77,16 @@ const Navbar = () => {
               </ul>
             </nav>
 
-            {/* Mobile Toggle */}
+            {/* Mobile Toggle (sm only) */}
             <button
-              className="md:hidden z-50 relative group"
+              className="md:hidden ml-auto"
               onClick={() => setOpenMenu(!openMenu)}
-              aria-label="Toggle menu"
             >
-              <div className="bg-white/10 p-2 rounded-lg group-hover:bg-white/20 transition-all duration-300">
-                {openMenu ? (
-                  <X className="w-7 h-7 text-white" />
-                ) : (
-                  <Menu className="w-7 h-7 text-white" />
-                )}
-              </div>
+              {openMenu ? (
+                <X className="w-7 h-7 text-white" />
+              ) : (
+                <Menu className="w-7 h-7 text-white" />
+              )}
             </button>
           </div>
 
