@@ -44,7 +44,7 @@ const ManageShortPosts = () => {
         <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center">
             <div className="w-full max-w-6xl flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold text-gray-800">
-                    Uploaded Short Videos 🎬
+                    Manage Short Videos 🎬
                 </h2>
                 <button
                     onClick={() => navigate("/shorts")}

@@ -36,7 +36,7 @@ const Navbar = () => {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             {/* Logo + Title */}
-            <div className="flex items-center gap-3 group cursor-pointer">
+            <div className="flex items-center justify-between gap-3 group cursor-pointer">
               <img
                 className="w-12 h-12 rounded-md shadow-md group-hover:scale-105 transition-transform duration-300"
                 src={Logo}
@@ -49,7 +49,7 @@ const Navbar = () => {
 
             {/* Desktop Menu - Simple Text Links */}
             <nav className="hidden md:block">
-              <ul className="flex items-center gap-6 lg:gap-8">
+              <ul className="flex items-center  justify-between gap-6 lg:gap-8">
                 {navItems.map((item, idx) => (
                   <li key={idx}>
                     <NavLink
