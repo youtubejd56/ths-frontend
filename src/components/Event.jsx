@@ -109,14 +109,33 @@ const Event = () => {
       <h2 className="text-2xl sm:text-3xl font-bold mb-6">Event Posts</h2>
 
       {posts.length < 4 ? (
-        <button
-          onClick={() => setShowModal(true)}
-          className="mb-6 bg-green-700 hover:bg-green-500 text-white px-4 sm:px-6 py-2 rounded text-sm sm:text-base"
-        >
-          + Create Post
-        </button>
+        isAdmin ? (
+          <button
+            onClick={() => setShowModal(true)}
+            className="mb-6 bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2.5 rounded-xl text-sm sm:text-base font-bold shadow-lg shadow-indigo-200 transition-all active:scale-95"
+          >
+            + Create Staff Post
+          </button>
+        ) : (
+          <div className="mb-8 p-6 bg-amber-50 border border-amber-200 rounded-2xl flex items-center gap-4 shadow-sm max-w-2xl">
+            <div className="w-12 h-12 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-amber-900 font-bold text-sm sm:text-base uppercase tracking-tight">Authorized Access Only</h4>
+              <p className="text-amber-700 text-xs sm:text-sm mt-0.5 leading-relaxed font-medium">
+                Media uploads are restricted to school personnel and authorized staff. Only school-related event pictures are permitted for publication.
+              </p>
+            </div>
+          </div>
+        )
       ) : (
-        <p className="text-red-600 mb-4 text-sm sm:text-base">Maximum 4 posts allowed!</p>
+        <p className="text-red-600 mb-6 font-bold text-sm sm:text-base flex items-center gap-2">
+          <span className="w-2 h-2 bg-red-600 rounded-full animate-pulse" />
+          Maximum limit of 4 active posts reached.
+        </p>
       )}
 
       {showModal && (
@@ -198,7 +217,7 @@ const Event = () => {
               )}
 
               {post.description && (
-                <p className="text-gray-800 text-sm sm:text-base mt-2 break-words line-clamp-4">{post.description}</p>
+                <p className="text-gray-800 text-sm sm:text-base mt-2 wrap-break-word line-clamp-4">{post.description}</p>
               )}
 
               {isAdmin && (
