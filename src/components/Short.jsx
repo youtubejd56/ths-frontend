@@ -81,14 +81,17 @@ const Short = () => {
 
     try {
       setLoading(true);
-      await axios.post(API_URL, formData);
+      await api.post("/shorts/", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
       alert("✅ Video uploaded successfully!");
       handleRemoveVideo();
       setTitle("");
       setCaption("");
     } catch (err) {
       console.error(err);
-
       if (err.response && err.response.data && err.response.data.error) {
         alert(err.response.data.error);
       } else {
